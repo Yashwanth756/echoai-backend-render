@@ -48,11 +48,11 @@ def update_story_id():
         return jsonify({"error": "Missing email or level"}), 400
 
     if level == "basic":
-        update_field = {"storyEasyId": story_index}
+        update_field = {"storyEasyId": int(story_index)}
     elif level == "medium":
-        update_field = {"storyMediumId": story_index}
+        update_field = {"storyMediumId": int(story_index)}
     elif level == "hard":
-        update_field = {"storyHardId": story_index}
+        update_field = {"storyHardId": int(story_index)}
     else:
         return jsonify({"error": "Invalid level"}), 400
 
@@ -132,7 +132,7 @@ def increment_session():
         {
             "$inc": {
                 f"module.{module}.sessionsCompleted": 1,
-                f"module.{module}.score": score
+                f"module.{module}.score": int(score)
             }
         }
     )
@@ -322,7 +322,7 @@ def increment_wordScrambleId():
     
     result = collection.update_one(
         {'email': username},
-        {"$set": {"wordscramble."+level+"Offset": index}}
+        {"$set": {"wordscramble."+level+"Offset": int(index)}}
     )
     if result.modified_count > 0:
         # print('Incremented word scramble id for:', username)
@@ -368,7 +368,7 @@ def increment_pronunciation_mirror_id():
 
     result = collection.update_one(
         {'email': username},
-        {"$set": {"pronunciationMirror"+level+"Id": index}}
+        {"$set": {"pronunciationMirror"+level+"Id": int(index)}}
     )
     if result.modified_count > 0:
         # print('Incremented pronunciationMirrorId for:', username)
@@ -390,7 +390,7 @@ def increment_vocabulary_trainer_id():
     level = request.args.get('level')
     index = request.args.get('index')
     result = collection.update_one({'email': username},
-                                      {"$set": {"vocabularyTrainer"+level+"Id": index}})
+                                      {"$set": {"vocabularyTrainer"+level+"Id": int(index)}})
     if result.modified_count > 0:
         # print('Incremented vocabularyTrainerId for:', username)
         return jsonify({'status': 'success', 'message': 'vocabularyTrainerId incremented'})
